@@ -101,6 +101,7 @@ exports.reestablecerPassword = async (req, res) => {
 
 }
 
+//Guarda nuevo pass en la BBDD
 exports.guardarPassword = async(req, res) => {
     const usuario = await Usuarios.findOne({
         token: req.params.token,
@@ -108,4 +109,21 @@ exports.guardarPassword = async(req, res) => {
             $gt: Date.now()
         }
     });
+
+    //no exite el usuario o el token es nvalidao
+    if(!usuario) {
+        req.flash('error', 'Formulario no es válido');
+        return res.redirect('/reestablecer-password');
+    }
+
+    // Asignar nuevo password, limpiar valores previos
+    usuario.password = req.body.password;
+    usuario.token = undefined;
+    usuario.expira = undefined;
+
+    //agregar y eliminar valores del objeto
+    await usuario.save();
+
+    req.flash('correcto', 'Password modificado correctamente!');
+    res.redirect('/iniciar-sesion');
 }

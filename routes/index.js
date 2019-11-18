@@ -38,7 +38,7 @@ module.exports = () => {
     /* Resetar y almacenar pass */
     router.get('/reestablecer-password/:token', authController.reestablecerPassword);
     router.post('/reestablecer-password/:token', authController.guardarPassword);
-
+    
     /* Panel de Admin */
     router.get('/administracion', authController.verificarUsuario, authController.mostrarPanel);
 
@@ -53,6 +53,9 @@ module.exports = () => {
 
     /* Muestra los candidatos por vacantes */
     router.get('/candidatos/:id', authController.verificarUsuario, vacantesController.mostrarCandidatos);
+
+    /* Buscador de vacantes */
+    router.post('/buscador', vacantesController.buscadorVacantes);
 
     return router;
 }
